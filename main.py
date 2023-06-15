@@ -124,7 +124,9 @@ with mp_hands.Hands(static_image_mode=0, model_complexity=0, min_detection_confi
                 a = list
                 p = [a[l.INDEX_FINGER_TIP][1], a[l.INDEX_FINGER_TIP][2], a[l.INDEX_FINGER_TIP][3]]
                 q = [a[l.THUMB_TIP][1], a[l.THUMB_TIP][2], a[l.THUMB_TIP][3]]
-                if math.dist(p, q) < 30:
+                t = [a[l.INDEX_FINGER_MCP][1], a[l.INDEX_FINGER_MCP][2], a[l.INDEX_FINGER_MCP][3]]
+                u = [a[l.WRIST][1], a[l.WRIST][2], a[l.WRIST][3]]
+                if math.dist(p, q) < (math.dist(t, u)/10 + 10):
                     if not indexfinger.touching:
                         indexfinger.touching = True
                         oldvolume = volume
@@ -147,6 +149,7 @@ with mp_hands.Hands(static_image_mode=0, model_complexity=0, min_detection_confi
                         status = result[0]
                         if status != 0:
                             print(f"Failed to send message to topic {topic}")
+                        indexfinger.touchCounter = 0
                         print("Set volume: " + str(volume))
 
                 else:
